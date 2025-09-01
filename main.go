@@ -25,7 +25,7 @@ func main() {
 
 	for {
 		resp := NewResp(conn)
-		val, err := resp.Read()
+		_, err := resp.Read()
 		if err != nil {
 			if err == io.EOF {
 				break
@@ -33,7 +33,7 @@ func main() {
 			fmt.Println("error reading from client: ", err)
 			os.Exit(1)
 		}
-		fmt.Printf("Received: %+v\n", val)
-		conn.Write([]byte("+OK\r\n"))
+		writer := NewWriter(conn)
+		writer.Write(Value{typ: "string", str: "OK"})
 	}
 }
